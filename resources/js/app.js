@@ -7,6 +7,24 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
+
+// tableau des routes
+import dashboard from './components/Dashboard.vue'
+
+let routes = [
+    { path: '/dashboard', component: dashboard },
+    { path: '/profile', component: require('./components/Profile.vue').default },
+    { path: '/users', component: require('./components/Users.vue').default }
+  ]
+
+//creation de l'intance de route
+  const router = new VueRouter({
+    mode:'history',
+    routes // short for `routes: routes`
+  })
 
 /**
  * The following block of code may be used to automatically register your
@@ -29,4 +47,5 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 const app = new Vue({
     el: '#app',
+    router
 });
