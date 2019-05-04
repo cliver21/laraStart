@@ -115,6 +115,7 @@ import { setInterval } from 'timers';
                 editMode:false,
                 users:{},
                 form: new Form({
+                    id:'',
                     name: '',
                     email: '',
                     password: '',
@@ -125,8 +126,25 @@ import { setInterval } from 'timers';
             }
         },
         methods: {
-            updateUser(){
-                console.log("editing mode")
+            updateUser(id){
+                //progresse bar debut
+                this.$Progress.start();
+               // console.log("editing mode")
+               this.form.put('api/user/'+this.form.id)
+               .then(() => {
+                   swal.fire(
+                                'Udated!',
+                                'Information has ben updaded.',
+                                'success'
+                            )
+                $('#addNew').modal('hide')
+
+                Fire.$emit('afterCreate');
+
+                 this.$Progress.finish();
+               }).catch(()=>{
+                    this.$Progress.fail();
+               });
             },
              editModal(user){
                 this.form.reset()
@@ -136,7 +154,7 @@ import { setInterval } from 'timers';
                 this.form.fill(user);
             },
             newModal(){
-                
+
                 this.form.reset()
                  this.form.clear()
                  this.editMode=false;
@@ -191,7 +209,7 @@ import { setInterval } from 'timers';
                             type: 'success',
                             title: 'User created in successfully'
                             })
-                            
+
                         // finish progrsse bar
                         this.$Progress.finish();
 
@@ -199,7 +217,7 @@ import { setInterval } from 'timers';
 
                 });
 
-               
+
             }
         },
         created() {

@@ -25,7 +25,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <li class="nav-item">
           <a class="nav-link" data-widget="pushmenu" href="#"><i class="fa fa-bars"></i></a>
         </li>
-      
+
       </ul>
 
     <!-- SEARCH FORM -->
@@ -41,10 +41,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </form>
 
     <!-- Right navbar links -->
-    
+
   </nav>
   <!-- /.navbar -->
-  
+
 
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -77,11 +77,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <i class="nav-icon fas fa-tachometer-alt blue"></i>
                   <p>
                     Dashboard
-                    
+
                   </p>
                 </router-link>
               </li>
- 
+
           <li class="nav-item has-treeview menu">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-cog"></i>
@@ -110,7 +110,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <i class="nav-icon fas fa-user orange"></i>
               <p>
                 Profile
-                
+
+              </p>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/developer" class="nav-link">
+              <i class="nav-icon fas fa-cog"></i>
+              <p>
+                Developer
+
               </p>
             </router-link>
           </li>
@@ -122,13 +131,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <p>
                                 {{ __('Logout') }}
                              </p>
-              
+
            </a>
 
            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                @csrf
            </form>
-            
+
           </li>
         </ul>
       </nav>
@@ -139,8 +148,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    
- 
+
+
 
     <!-- Main content -->
     <div class="content">

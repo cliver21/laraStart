@@ -18,7 +18,10 @@ class UserController extends Controller
     {
        return User::latest()->paginate(10);
     }
-
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -53,6 +56,10 @@ class UserController extends Controller
     {
         //
     }
+    public function profile()
+    {
+        return auth('api')->user();
+    }
 
     /**
      * Update the specified resource in storage.
@@ -63,7 +70,16 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user=User::findOrFail($id);
+        $this->validate($request,[
+            'name' => 'required|string|max:255',
+            'email'=> 'required | string | email | max:255 | unique:users,email,'.$user->id,
+            'password' => 'sometimes|string|min:6',
+            'type'=> 'required'
+        ]);
+
+
+         $user->update($request->all());
     }
 
     /**
