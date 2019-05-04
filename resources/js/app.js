@@ -7,25 +7,77 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
-import Vue from 'vue'
+//import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
+//moment
+import moment from 'moment';
+//progressbar
+import VueProgressBar from 'vue-progressbar'
+//sweetalert
+import Swal from 'sweetalert2'
+window.swal=Swal;
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000
+});
+//on definir le toast goblalement
+window.Toast=Toast;
+
+window.Fire= new Vue();
+
+Vue.use(VueProgressBar, {
+  color: 'rgb(143, 255, 199)',
+  failedColor: 'red',
+  speed: 0.7,
+  height: '3px'
+})
+
+//vform import
+import {
+    Form,
+    HasError,
+    AlertError
+} from 'vform';
+//initialisation de vform en global
+
+window.Form = Form;
+Vue.component(HasError.name, HasError)
+Vue.component(AlertError.name, AlertError)
 
 // tableau des routes
 import dashboard from './components/Dashboard.vue'
 
-let routes = [
-    { path: '/dashboard', component: dashboard },
-    { path: '/profile', component: require('./components/Profile.vue').default },
-    { path: '/users', component: require('./components/Users.vue').default }
-  ]
+let routes = [{
+        path: '/dashboard',
+        component: dashboard
+    },
+    {
+        path: '/profile',
+        component: require('./components/Profile.vue').default
+    },
+    {
+        path: '/users',
+        component: require('./components/Users.vue').default
+    }
+]
 
 //creation de l'intance de route
-  const router = new VueRouter({
-    mode:'history',
+const router = new VueRouter({
+    mode: 'history',
     routes // short for `routes: routes`
-  })
+})
 
+//filltre de l'application
+Vue.filter('upText', function (text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+});
+Vue.filter('myDate', function (created) {
+    return moment(created).format('MMMM Do YYYY');
+});
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
