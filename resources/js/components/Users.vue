@@ -214,7 +214,7 @@ import { setInterval } from 'timers';
                         this.$Progress.finish();
 
                 }).catch(() => {
-
+                    swal("Failed!", "There was something wronge.", "warning")
                 });
 
 

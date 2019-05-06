@@ -8,11 +8,11 @@
                     <!-- Add the bg color to the header using any of the bg-* classes -->
                     <div class="widget-user-header text-white"
                         style="background-image:url(./img/cover.jpg); height: 300px; background-size: cover; background-position: center center;" >
-                        <h3 class="widget-user-username">Elizabeth Pierce</h3>
-                        <h5 class="widget-user-desc">Web Designer</h5>
+                        <h3 class="widget-user-username">{{this.form.name }}</h3>
+                        <h5 class="widget-user-desc">{{this.form.type}}</h5>
                     </div>
                     <div class="widget-user-image">
-                        <img class="img-circle" src="" alt="User Avatar">
+                        <img class="img-circle" :src="getProfilePhoto()" alt="User Avatar">
                     </div>
                     <div class="card-footer">
                         <div class="row">
@@ -61,7 +61,7 @@
                   <!-- /.tab-pane -->
 
                   <div class="tab-pane active show" id="settings">
-                    <form class="form-horizontal">
+                    <form class="form-horizontal" @submit.prevent="updateinfo">
                       <div class="form-group">
                         <label for="inputName" class="col-sm-2 control-label">Name</label>
 
@@ -73,41 +73,35 @@
                         <label for="inputEmail" class="col-sm-2 control-label">Email</label>
 
                         <div class="col-sm-10">
-                          <input type="email"  v-model="form.email" class="form-control" id="inputEmail" placeholder="Email">
+                          <input type="email"  v-model="form.email" class="form-control" :class="{ 'is-invalid': form.errors.has('email') }" id="inputEmail" placeholder="Email">
                         </div>
                       </div>
+
                       <div class="form-group">
-                        <label for="inputName2" class="col-sm-2 control-label">Name</label>
+                        <label for="inputExperience" class="col-sm-2 control-label">Bio</label>
 
                         <div class="col-sm-10">
-                          <input type="text" class="form-control" id="inputName2" placeholder="Name">
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label for="inputExperience" class="col-sm-2 control-label">Experience</label>
-
-                        <div class="col-sm-10">
-                          <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea><div id="grammalecte_menu0_shadow" style="display: none; position: absolute; width: 0px; height: 0px; margin-top: 8px;"></div><div style="display: none; position: absolute; width: 0px; height: 0px; margin-top: 0px;"></div>
+                          <textarea class="form-control" v-model="form.bio" :class="{ 'is-invalid': form.errors.has('bio') }" id="inputExperience" placeholder="Experience"></textarea><div id="grammalecte_menu0_shadow" style="display: none; position: absolute; width: 0px; height: 0px; margin-top: 8px;"></div><div style="display: none; position: absolute; width: 0px; height: 0px; margin-top: 0px;"></div>
                         </div>
                       </div>
                   <div class="form-group">
                         <label for="inputSkills" class="col-sm-2 control-label">Profile Photo</label>
 
                         <div class="col-sm-10">
-                          <input type="file" class="form-control" id="inputSkills" >
+                          <input type="file" @change="updateProfile" id="photo" name="photo" class="form-input" >
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="inputSkills" class="col-sm-2 control-label">Passport</label>
+                        <label for="inputSkills" class="col-sm-2 control-label">Password</label>
 
                         <div class="col-sm-10">
-                          <input type="text" class="form-control" id="inputSkills" placeholder="Passport">
+                          <input type="password"  v-model="form.password" class="form-control" id="inputSkills" :class="{ 'is-invalid': form.errors.has('password') }" placeholder="password">
                         </div>
                       </div>
 
                       <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                          <button type="submit" class="btn btn-danger">Submit</button>
+                          <button type="submit"  class="btn btn-danger">Submit</button>
                         </div>
                       </div>
                     </form>
@@ -144,6 +138,40 @@
         },
         created(){
             axios.get("api/profile").then(({ data }) => { this.form.fill(data) })
-        }
+        },
+        methods:{
+            getProfilePhoto(){
+                let photo = (this.form.photo.length > 200) ? this.form.photo : "img/profile/"+ this.form.photo ;
+                return photo;
+            },
+            updateinfo(){
+                this.$Progress.start();
+                this.form.put('api/profile').then(()=>{
+
+                    this.$Progress.finish();
+                }).catch(()=>{
+                    this.$Progress.fail();
+                });
+            },
+          updateProfile(e){
+
+                let file = e.target.files[0];
+                let reader = new FileReader();
+
+                if(file['size'] < 2111775){
+                    reader.onloadend = (file) => {
+                    this.form.photo = reader.result;
+                }
+                reader.readAsDataURL(file);
+                }else{
+                     swal.fire({
+                              type:  'error',
+                               title: 'Oops...',
+                                text:'your are uploading a larger file'
+                           } )
+                }
+            }
+        },
+
     }
 </script>
